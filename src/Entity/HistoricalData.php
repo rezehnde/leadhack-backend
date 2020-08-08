@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity(repositoryClass=HistoricalDataRepository::class)
  */
-class HistoricalData
+class HistoricalData extends ReportData
 {
     /**
      * @ORM\Id()
