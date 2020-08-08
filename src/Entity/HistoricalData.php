@@ -7,14 +7,7 @@ use App\Repository\HistoricalDataRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource(
- *      collectionOperations={
- *          "post"={
- *               "path": "historical_data",
- *          },
- *      },
- *      itemOperations={},
- * )
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=HistoricalDataRepository::class)
  */
 class HistoricalData
