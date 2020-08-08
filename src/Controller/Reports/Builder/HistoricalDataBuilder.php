@@ -15,15 +15,15 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class HistoricalDataBuilder implements Builder
 {
     private HistoricalDataReport $report;
-    private HttpClientInterface $client;
+    private HttpClientInterface $httpClient;
     private HistoricalData $data;
     private Swift_Mailer $mailer;
 
     public function __construct(
-        HttpClientInterface $client,
+        HttpClientInterface $httpClient,
         Swift_Mailer $mailer
     ) {
-        $this->client = $client;
+        $this->httpClient = $httpClient;
         $this->mailer = $mailer;
     }
 
@@ -34,7 +34,7 @@ class HistoricalDataBuilder implements Builder
 
     public function createReport()
     {
-        $response = $this->client->request(
+        $response = $this->httpClient->request(
             'GET',
             'https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-historical-data',
             [
