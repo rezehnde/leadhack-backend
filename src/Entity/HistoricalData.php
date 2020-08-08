@@ -7,7 +7,18 @@ use App\Repository\HistoricalDataRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      collectionOperations={
+ *          "post",
+ *      },
+ *      itemOperations={
+ *          "get"={
+ *              "controller"=NotFoundAction::class,
+ *              "read"=false,
+ *              "output"=false,
+ *          },
+ *      },
+ * )
  * @ORM\Entity(repositoryClass=HistoricalDataRepository::class)
  */
 class HistoricalData
