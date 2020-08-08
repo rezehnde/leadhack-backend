@@ -3,6 +3,8 @@
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use App\Controler\Builder\Reports\HistoricalDataBuilder;
+use App\Controller\Builder\ReportDirector;
 use App\Entity\HistoricalData;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -30,7 +32,7 @@ final class HistoricalDataDataPersister implements DataPersisterInterface
                 ($context['collection_operation_name'] ?? null) === 'post'
             )
         ) {
-            $this->doSomething($data);
+            $this->generateReport($data);
         }
     }
 
@@ -40,7 +42,10 @@ final class HistoricalDataDataPersister implements DataPersisterInterface
         $this->entityManager->flush();
     }
 
-    private function doSomething($data)
+    private function generateReport($data)
     {
+        $reportBuilder = new HistoricalDataBuilder();
+        $reportData = (new ReportDirector())->build($reportBuilder);
+        file_put_contents(__DIR__.'/teste.txt', print_r($reportData, true));
     }
 }
