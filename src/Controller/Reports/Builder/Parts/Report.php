@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\Reports\Builder\Parts;
 
-abstract class Report
+abstract class Report implements ReportInterface
 {
-    /**
-     * @var object[]
-     */
-    private array $data = [];
+    public int $statusCode;
+    public string $contentType;
+    public string $content;
 
-    public function setPart(string $key, object $value)
-    {
-        $this->data[$key] = $value;
-    }
+    abstract public function setStatusCode(int $statusCode);
+
+    abstract public function setContentType(string $contentType);
+
+    abstract public function setContent(string $content);
 }

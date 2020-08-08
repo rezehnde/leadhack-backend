@@ -3,18 +3,22 @@
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-use App\Controler\Builder\Reports\HistoricalDataBuilder;
-use App\Controller\Builder\ReportDirector;
+use App\Controller\Reports\Builder\Director;
+use App\Controller\Reports\Builder\HistoricalDataBuilder;
+use App\Controller\Reports\Builder\Parts\Report;
 use App\Entity\HistoricalData;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class HistoricalDataDataPersister implements DataPersisterInterface
 {
     private $entityManager;
+    private $client;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, HttpClientInterface $client)
     {
         $this->entityManager = $entityManager;
+        $this->client = $client;
     }
 
     public function supports($data, array $context = []): bool
@@ -27,13 +31,7 @@ final class HistoricalDataDataPersister implements DataPersisterInterface
         $this->entityManager->persist($data);
         $this->entityManager->flush();
 
-        if (
-            $data instanceof HistoricalData && (
-                ($context['collection_operation_name'] ?? null) === 'post'
-            )
-        ) {
-            $this->generateReport($data);
-        }
+        return $this->generateReport($data);
     }
 
     public function remove($data, array $context = [])
@@ -42,10 +40,10 @@ final class HistoricalDataDataPersister implements DataPersisterInterface
         $this->entityManager->flush();
     }
 
-    private function generateReport($data)
+    private function generateReport($data): Report
     {
-        $reportBuilder = new HistoricalDataBuilder();
-        $reportData = (new ReportDirector())->build($reportBuilder);
-        file_put_contents(__DIR__.'/teste.txt', print_r($reportData, true));
+        $historicalDataBuilder = new HistoricalDataBuilder($this->client);
+
+        return (new Director())->build($historicalDataBuilder);
     }
 }

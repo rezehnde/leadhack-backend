@@ -8,6 +8,7 @@ use App\Controller\Reports\Builder\Director;
 use App\Controller\Reports\Builder\HistoricalDataBuilder;
 use App\Controller\Reports\Builder\Parts\HistoricalDataReport;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
  * @internal
@@ -17,7 +18,8 @@ class DirectorTest extends TestCase
 {
     public function testCanBuildHistoricalDataReport()
     {
-        $historicalDataBuilder = new HistoricalDataBuilder();
+        $client = new MockHttpClient();
+        $historicalDataBuilder = new HistoricalDataBuilder($client);
         $newReport = (new Director())->build($historicalDataBuilder);
 
         $this->assertInstanceOf(HistoricalDataReport::class, $newReport);
