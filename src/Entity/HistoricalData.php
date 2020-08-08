@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\HistoricalDataRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -32,21 +33,38 @@ class HistoricalData extends ReportData
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $company_symbol;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\Type("\DateTimeInterface")
+     * @Assert\Expression(
+     *      expression="value < this.getEndDate()",
+     *      message="Start date value must have to be less than the end date value"
+     * )
+     * @Assert\LessThan("today")
      */
     private $start_date;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\Type("\DateTimeInterface")
+     * @Assert\Expression(
+     *      expression="value > this.getStartDate()",
+     *      message="End date value must have to be bigger than the start date value"
+     * )
+     * @Assert\LessThanOrEqual("today")
      */
     private $end_date;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email."
+     * )
      */
     private $email;
 
