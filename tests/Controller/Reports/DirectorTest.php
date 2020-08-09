@@ -19,7 +19,9 @@ class DirectorTest extends TestCase
     public function testCanBuildHistoricalDataReport()
     {
         $client = new MockHttpClient();
-        $historicalDataBuilder = new HistoricalDataBuilder($client);
+        /** @var \Swift_Mailer&\PHPUnit\Framework\MockObject\MockObject $mailer */
+        $mailer = $this->createMock(\Swift_Mailer::class);
+        $historicalDataBuilder = new HistoricalDataBuilder($client, $mailer);
         $newReport = (new Director())->build($historicalDataBuilder);
 
         $this->assertInstanceOf(HistoricalDataReport::class, $newReport);

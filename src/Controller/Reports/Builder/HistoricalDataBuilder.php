@@ -25,6 +25,7 @@ class HistoricalDataBuilder implements Builder
     ) {
         $this->httpClient = $httpClient;
         $this->mailer = $mailer;
+        $this->data = new HistoricalData();
     }
 
     public function setRequestData(ReportData $data)
@@ -34,6 +35,23 @@ class HistoricalDataBuilder implements Builder
 
     public function createReport()
     {
+        $historicalDataReport = new HistoricalDataReport();
+
+        if (null == $this->data) {
+            $this->report = new HistoricalDataReport();
+
+            return;
+        }
+
+        $startDate = $this->data->getStartDate();
+        $endDate = $this->data->getEndDate();
+
+        if (null == $startDate || null == $endDate) {
+            $this->report = new HistoricalDataReport();
+
+            return;
+        }
+
         $response = $this->httpClient->request(
             'GET',
             'https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-historical-data',
@@ -50,7 +68,6 @@ class HistoricalDataBuilder implements Builder
                 ],
             ]
         );
-        $historicalDataReport = new HistoricalDataReport();
         $historicalDataReport->setStatusCode($response->getStatusCode());
         $historicalDataReport->setContentType($response->getHeaders()['content-type'][0]);
         $historicalDataReport->setContent($response->getContent());
@@ -59,6 +76,13 @@ class HistoricalDataBuilder implements Builder
 
     public function sendEmail()
     {
+        if (empty($this->data->getCompanySymbol()) ||
+            null == $this->data->getStartDate() ||
+            null == $this->data->getEndDate() ||
+            empty($this->data->getEmail())) {
+            return;
+        }
+
         $company = $this->data->getCompanySymbol();
         $startDate = $this->data->getStartDate()->format('Y-m-d');
         $endDate = $this->data->getEndDate()->format('Y-m-d');
