@@ -1,5 +1,5 @@
 # leadhack-backend
-LeadHack Backend built-in [Symfony API](https://symfony.com/doc/current/index.html) which serves historical stock prices data for LeadHack Frontend.
+LeadHack Backend built-in [Symfony API](https://symfony.com/doc/current/index.html) which serves historical stock prices data for [LeadHack Frontend](https://github.com/rezehnde/leadhack-frontend).
 
 See it in action: [https://leadhack-backend.rezehnde.com/](https://leadhack-backend.rezehnde.com/)
 
