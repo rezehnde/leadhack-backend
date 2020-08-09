@@ -1,0 +1,49 @@
+version: '3.3'
+
+networks:
+  leadhack:
+
+services:
+  leadhack:
+    image: nginx:stable-alpine
+    container_name: nginx-leadhack
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - leadhack
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php-leadhack
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "9000:9000"
+    networks:
+      - leadhack
+
+  composer:
+    image: composer:latest
+    container_name: composer-leadhack
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - php
+    networks:
+      - leadhack
+
+  npm:
+    image: node:13.7
+    container_name: npm-leadhack
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ['npm']
