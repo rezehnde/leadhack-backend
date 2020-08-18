@@ -1,9 +1,7 @@
-# leadhack-backend
-LeadHack Backend built-in [Symfony API](https://symfony.com/doc/current/index.html) which serves historical stock prices data for [LeadHack Frontend](https://github.com/rezehnde/leadhack-frontend).
+# Stock Prices API
+Stock Prices API built-in [Symfony API](https://symfony.com/doc/current/index.html) which delivers historical stock prices data.
 
-See it in action: [https://leadhack-backend.rezehnde.com/](https://leadhack-backend.rezehnde.com/)
-
-Send an JSON object in the format bellow to ```https://leadhack-backend.rezehnde.com/historical-data``` and _voilá_ (see the Google stock prices).
+Send an JSON object in the format bellow to ```/historical-data``` and _voilá_ (see the Google stock prices).
 ```
 {
   "companySymbol": "GOOG",
@@ -17,7 +15,7 @@ Send an JSON object in the format bellow to ```https://leadhack-backend.rezehnde
 1. Do this bellow inside your domain directory
 ```
 git init
-git remote add origin https://github.com/rezehnde/leadhack-backend.git
+git remote add origin https://github.com/rezehnde/stock-prices-api.git
 git pull origin master
 composer update
 php bin/console doctrine:database:create
@@ -29,7 +27,7 @@ php bin/console doctrine:migrations:migrate
 ```
 mkdir leadhack-backend
 git init
-git remote add origin https://github.com/rezehnde/leadhack-backend.git
+git remote add origin https://github.com/rezehnde/stock-prices-api.git
 git pull origin master
 docker-compose up -d --build leadhack
 docker-compose run --rm composer update
